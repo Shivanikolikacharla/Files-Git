@@ -37,3 +37,32 @@ pipeline:
                       roleArn: ""
                   timeout: 10m
         tags: {}
+    - stage:
+        name: stage-2
+        identifier: stage2
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          execution:
+            steps:
+              - step:
+                  type: S3Upload
+                  name: S3Upload_1
+                  identifier: S3Upload_1
+                  spec:
+                    connectorRef: AWS1
+                    region: us-east-1
+                    bucket: bucket99511
+                    sourcePath: https://s3.console.aws.amazon.com/s3/buckets/bucket99511
+          platform:
+            os: Windows
+            arch: Arm64
+          runtime:
+            type: Cloud
+            spec: {}
+  properties:
+    ci:
+      codebase:
+        connectorRef: Conector2
+        build: <+input>
