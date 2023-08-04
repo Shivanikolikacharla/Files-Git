@@ -37,3 +37,9 @@ pipeline:
                       roleArn: ""
                   timeout: 10m
         tags: {}
+  variables:
+    - name: s3bucket
+      type: String
+      description: ""
+      required: false
+      value: <+input>
