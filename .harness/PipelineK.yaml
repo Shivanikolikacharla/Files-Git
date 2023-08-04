@@ -43,3 +43,8 @@ pipeline:
       description: ""
       required: false
       value: <+input>
+    - name: s3bucket1
+      type: String
+      description: ""
+      required: false
+      value: <+input>
