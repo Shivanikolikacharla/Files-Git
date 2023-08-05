@@ -1,5 +1,5 @@
 Parameters:AWSTemplateFormatVersion: "2010-09-09"
-Description: "Managedpolicy to user"
+Description: "s3 bucket creation"
 Parameters:
   BucketName:
     Type: String
