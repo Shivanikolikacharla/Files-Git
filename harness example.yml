@@ -1,11 +1,11 @@
 Parameters:AWSTemplateFormatVersion: "2010-09-09"
 Description: "Managedpolicy to user"
+Parameters:
+  BucketName:
+    Type: String
+    Description: name of the s3 bucket
 Resources:
   IamUser:
     Type: AWS::IAM::User
-    Properties:
-      UserName: !Ref UserName
-      LoginProfile:
-        Password: !Ref UserPassword
-      ManagedPolicyArns:
-        - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
+    Properties: !Ref BucketName
+      
