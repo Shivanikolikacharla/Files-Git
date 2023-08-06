@@ -35,9 +35,6 @@ pipeline:
                               gitFetchType: Branch
                               branch: master
                       roleArn: ""
-                      parameterOverrides:
-                        - name: s3buck
-                          value: s37730
-                          type: String
+                      parameterOverrides: []
                   timeout: 10m
         tags: {}
