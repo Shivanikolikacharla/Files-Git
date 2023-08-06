@@ -18,7 +18,7 @@ pipeline:
                   name: CreateStack_1
                   identifier: CreateStack_1
                   spec:
-                    provisionerIdentifier: S3Buc
+                    provisionerIdentifier: BucketName1
                     configuration:
                       stackName: s3-bucket-stack
                       connectorRef: AWS1
@@ -39,7 +39,7 @@ pipeline:
                   timeout: 10m
         tags: {}
   variables:
-    - name: BucketName
+    - name: BucketName1
       type: String
       description: ""
       required: false
