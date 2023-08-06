@@ -1,12 +1,8 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: "s3 bucket creation"
-Parameters:
-  s3buck:
-    Type: String
-    Description: name of the s3 bucket
 Resources:
   S3Bucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Ref s3buck
+      BucketName: !Ref BucketName
       
