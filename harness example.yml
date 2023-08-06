@@ -5,7 +5,6 @@ Parameters:
     Type: String
     Description: name of the s3 bucket
 Resources:
-  IamUser:
-    Type: AWS::IAM::User
+  s3:
     Properties: !Ref BucketName
       
