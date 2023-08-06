@@ -47,4 +47,9 @@ pipeline:
             description: ""
             required: false
             value: <+input>
-  variables: []
+  variables:
+    - name: shivani999
+      type: String
+      description: ""
+      required: false
+      value: <+input>
