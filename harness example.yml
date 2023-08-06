@@ -1,7 +1,11 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: "s3 bucket creation"
+Parameters:
+  shivani999:
+    Type: String
+    Description: bucket to be created
 Resources:
   S3Bucket:
     Type: AWS::S3::Bucket
     Properties:
-    
+      BucketName: !Ref shivani999
