@@ -36,7 +36,7 @@ pipeline:
                               branch: master
                       roleArn: ""
                       parameterOverrides:
-                        - name: BucketName
+                        - name: s3buck
                           value: s37730
                           type: String
                   timeout: 10m
