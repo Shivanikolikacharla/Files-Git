@@ -7,5 +7,6 @@ Parameters:
 Resources:
   S3Bucket:
     Type: AWS::S3::Bucket
-    Properties: !Ref BucketName
+    Properties:
+      s3bucket: !Ref BucketName
       
