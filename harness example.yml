@@ -5,6 +5,7 @@ Parameters:
     Type: String
     Description: name of the s3 bucket
 Resources:
-  s3:
+  S3Bucket:
+    Type: AWS::S3::Bucket
     Properties: !Ref BucketName
       
