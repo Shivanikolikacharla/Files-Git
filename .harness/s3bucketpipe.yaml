@@ -38,3 +38,9 @@ pipeline:
                       parameterOverrides: []
                   timeout: 10m
         tags: {}
+  variables:
+    - name: s3buck
+      type: String
+      description: ""
+      required: false
+      value: <+input>
