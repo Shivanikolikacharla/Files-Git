@@ -41,10 +41,5 @@ pipeline:
                           type: String
                   timeout: 10m
         tags: {}
-        variables:
-          - name: shivani999
-            type: String
-            description: ""
-            required: false
-            value: <+input>
+        variables: []
   variables: []
