@@ -42,4 +42,9 @@ pipeline:
                   timeout: 10m
         tags: {}
         variables: []
-  variables: []
+  variables:
+    - name: s3_buc89
+      type: String
+      description: ""
+      required: false
+      value: <+input>
