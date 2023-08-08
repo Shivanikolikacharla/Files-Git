@@ -1,0 +1,11 @@
+inputSet:
+  pipeline:
+    identifier: s3bucketpipe
+    variables:
+      - name: Bucket56
+        type: String
+        value: b99511
+  name: Bucket56
+  identifier: Bucket56
+  orgIdentifier: default
+  projectIdentifier: Harness1
