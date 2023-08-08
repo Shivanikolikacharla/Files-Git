@@ -36,8 +36,8 @@ pipeline:
                               branch: master
                       roleArn: ""
                       parameterOverrides:
-                        - name: Bucket45
-                          value: <+pipeline.variables.enterthebucketname>
+                        - name: Bucket56
+                          value: <+pipeline.variables.Bucket56>
                           type: String
                   timeout: 10m
         tags: {}
