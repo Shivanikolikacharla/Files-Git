@@ -43,7 +43,7 @@ pipeline:
         tags: {}
         variables: []
   variables:
-    - name: enterthebucketname
+    - name: Bucket56
       type: String
       description: ""
       required: false
