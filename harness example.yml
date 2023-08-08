@@ -3,7 +3,6 @@ Description: "s3 bucket creation"
 Parameters:
   shivani999:
     Type: String
-    Description: bucket to be created
 Resources:
   S3Bucket:
     Type: AWS::S3::Bucket
