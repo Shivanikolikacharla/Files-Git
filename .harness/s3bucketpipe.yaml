@@ -20,7 +20,7 @@ pipeline:
                   spec:
                     provisionerIdentifier: Buc23
                     configuration:
-                      stackName: s3-bucket-stack
+                      stackName: s3-bucket
                       connectorRef: AWS1
                       region: us-east-1
                       templateFile:
