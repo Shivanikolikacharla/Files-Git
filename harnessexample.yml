@@ -1,0 +1,10 @@
+Parameters:AWSTemplateFormatVersion: "2010-09-09"
+Description: "Managedpolicy to user"
+Parameters:
+  BucketName:
+    Type: String
+Resources:
+  IamUser:
+    Type: AWS::IAM::User
+    Properties: !Ref BucketName
+      
