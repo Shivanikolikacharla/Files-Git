@@ -30,7 +30,7 @@ pipeline:
                             type: Github
                             spec:
                               paths:
-                                - harness example.yml
+                                - harnessexample.yml
                               connectorRef: Github2
                               gitFetchType: Branch
                               branch: master
