@@ -1,10 +1,10 @@
-Parameters:AWSTemplateFormatVersion: "2010-09-09"
-Description: "Managedpolicy to user"
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "s3 bucket creation"
 Parameters:
-  BucketName:
+  Bucket56:
     Type: String
 Resources:
-  IamUser:
-    Type: AWS::IAM::User
-    Properties: !Ref BucketName
-      
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref shivani999
