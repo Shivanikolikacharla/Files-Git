@@ -37,13 +37,18 @@ pipeline:
                       roleArn: ""
                       parameterOverrides:
                         - name: Bucket56
-                          value: <+pipeline.variables.Bucket56>
+                          value: <+pipeline.variables.enterthebucketname>
                           type: String
                   timeout: 10m
         tags: {}
         variables: []
   variables:
     - name: Bucket56
+      type: String
+      description: ""
+      required: false
+      value: <+input>
+    - name: enterthebucketname
       type: String
       description: ""
       required: false
