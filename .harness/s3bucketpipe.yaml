@@ -48,8 +48,3 @@ pipeline:
       description: ""
       required: false
       value: <+input>
-    - name: Bucket45
-      type: String
-      description: ""
-      required: false
-      value: <+input>
