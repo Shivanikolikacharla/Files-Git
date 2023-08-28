@@ -4,5 +4,5 @@ Resources:
   MyRepository: 
     Type: AWS::ECR::Repository
     Properties: 
-      RepositoryName: "test-repository"
+      RepositoryName: "t-repository"
   
