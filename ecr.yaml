@@ -12,6 +12,11 @@ Resources:
       Tags:
         - Key: Application
           Value: Ecr1
+Outputs:
+  RepoName:
+    Value: !Ref RepoName
 
+  
+ 
 
   
