@@ -1,10 +1,17 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: "s3 bucket creation"
+Description: "Ecr repository"
 Parameters:
-  Bucket56:
+  RepoName: 
     Type: String
+    Description: providing the repo name
 Resources:
-  S3Bucket:
-    Type: AWS::S3::Bucket
-    Properties:
-      BucketName: !Ref Bucket56
+  MyRepository: 
+    Type: AWS::ECR::Repository
+    Properties: 
+      RepositoryName: !Ref repoName
+Outputs:
+  RepoName:
+    Value: !GetAtt RepoName. RepositoryName
+
+  
+  
