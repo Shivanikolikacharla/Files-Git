@@ -1,8 +1,17 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: "Ecr repository"
+Parameters:
+  RepoName: 
+    Type: String
+    Description: providing the repo name
 Resources:
   MyRepository: 
     Type: AWS::ECR::Repository
     Properties: 
-      RepositoryName: "t-repository"
+      RepositoryName: !Ref repoName
+Outputs:
+  RepoName:
+    Value: !GetAtt RepoName. RepositoryName
+
+  
   
