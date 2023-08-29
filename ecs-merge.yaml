@@ -1,0 +1,106 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Ecs cluster creation"
+Parameters:
+  ServiceName:
+    Type: String
+    Default: ecsservice
+  VPC:
+    Type: String
+    Default: vpc-0c656415e8d14bb30
+  Subnet1:
+    Type: String
+    Default: subnet-0efd8693e90c812a3
+  Subnet2:
+    Type: String
+    Default: subnet-0def3cea0eaa78f25
+  ContainerPort:
+    Type: Number
+    Default: 80
+  ContainerMemory:
+    Type: String
+    Default: 1GB
+  MinContainers:
+    Type: Number
+    Default: 1
+  ContainerCpu:
+    Type: String
+    Default: 256
+Resources:
+  ECSCluster:
+    Type: AWS::ECS::Cluster
+    Properties: 
+      ClusterName: ECSClusterName
+      CapacityProviders:
+        - FARGATE
+        - FARGATE_SPOT
+  TaskDef:
+    Type: AWS::ECS::TaskDefinition
+    Properties: 
+      Family: "My-def"
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      ContainerDefinitions:
+        - Name: !Ref ServiceName
+          Image: "645293861782.dkr.ecr.us-east-1.amazonaws.com/t-repository:latest"        
+          PortMappings:
+            - ContainerPort: !Ref ContainerPort
+      Cpu: !Ref ContainerCpu
+      Memory: !Ref ContainerMemory
+      NetworkMode: awsvpc
+      ExecutionRoleArn: !Ref ExecutionRole
+      TaskRoleArn: !Ref TaskRole
+  MyECSService:
+    Type: AWS::ECS::Service
+    Properties:
+      ServiceName: myservice
+      Cluster: !Ref ECSCluster
+      TaskDefinition: !Ref TaskDef
+      DesiredCount: !Ref MinContainers
+      LaunchType: FARGATE
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: ENABLED
+          Subnets:
+            - !Ref Subnet1
+            - !Ref Subnet2
+          SecurityGroups:
+            - !Ref ContainerSecurityGroup
+  ExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: ExeRole1
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action: "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+  TaskRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: ecsRole2
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action: "sts:AssumeRole"
+  ContainerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: MySecGrp
+      VpcId: !Ref VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: !Ref ContainerPort
+          ToPort: !Ref ContainerPort 
+Outputs:
+  ECSTaskDefinition:
+    Description: The created Taskdefinition.
+    Value: !Ref TaskDef       
+
+
+  
