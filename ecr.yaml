@@ -8,7 +8,7 @@ Resources:
   MyRepository: 
     Type: AWS::ECR::Repository
     Properties: 
-      RepositoryName: !Ref repoName
+      RepositoryName: !Ref RepoName
 Outputs:
   RepoName:
     Value: !GetAtt RepoName. RepositoryName
