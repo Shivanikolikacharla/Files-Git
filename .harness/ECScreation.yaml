@@ -93,5 +93,14 @@ pipeline:
                         - name: ImageURI
                           value: <+input>
                           type: String
+                        - name: Subnet1
+                          value: <+input>
+                          type: String
+                        - name: Subnet2
+                          value: <+input>
+                          type: String
+                        - name: VPC
+                          value: <+input>
+                          type: String
                   timeout: 10m
         tags: {}
