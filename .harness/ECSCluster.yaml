@@ -6,8 +6,8 @@ pipeline:
   tags: {}
   stages:
     - stage:
-        name: ecr
-        identifier: ecr
+        name: ECR
+        identifier: ECR
         description: ""
         type: Custom
         spec:
@@ -20,7 +20,7 @@ pipeline:
                   spec:
                     provisionerIdentifier: ECR
                     configuration:
-                      stackName: ECR
+                      stackName: Ecr-stack
                       connectorRef: AWSACG2
                       region: us-east-1
                       templateFile:
@@ -35,9 +35,5 @@ pipeline:
                               gitFetchType: Branch
                               branch: master
                       roleArn: ""
-                      parameterOverrides:
-                        - name: RepoName1
-                          value: ECR-Rep
-                          type: String
                   timeout: 10m
         tags: {}
