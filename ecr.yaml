@@ -3,18 +3,15 @@ Description: "Ecr repository"
 Parameters:
   ECRRepo1: 
     Type: String
-    Description: providing the repo name
 Resources:
   Repository1: 
     Type: AWS::ECR::Repository
     Properties: 
-      RepositoryName: !Ref ECRRepo1
+      RepositoryName: !Ref ECRRepo1 
 Outputs:
   RepoName:
     Value: !Ref ECRRepo1
-
-
-
+ 
   
  
 
