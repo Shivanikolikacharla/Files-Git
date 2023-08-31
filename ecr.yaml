@@ -5,7 +5,7 @@ Parameters:
     Type: String
     Description: providing the repo name
 Resources:
-  MyRepository: 
+  Repository1: 
     Type: AWS::ECR::Repository
     Properties: 
       RepositoryName: !Ref RepoName
@@ -16,4 +16,3 @@ Outputs:
   RepoName:
     Value: !Ref RepoName
 
-  
