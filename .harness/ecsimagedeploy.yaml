@@ -35,5 +35,41 @@ pipeline:
                               branch: master
                       roleArn: ""
                       connectorRef: AWSACG2
+                      parameterOverrides:
+                        - name: RepoName
+                          value: <+input>
+                          type: String
+                  timeout: 10m
+        tags: {}
+    - stage:
+        name: ECS
+        identifier: ECS
+        description: ""
+        type: Custom
+        spec:
+          execution:
+            steps:
+              - step:
+                  type: CreateStack
+                  name: CreateStack_1
+                  identifier: CreateStack_1
+                  spec:
+                    provisionerIdentifier: ECS
+                    configuration:
+                      stackName: ECs-creation
+                      connectorRef: AWSACG2
+                      region: us-east-1
+                      templateFile:
+                        type: Remote
+                        spec:
+                          store:
+                            type: Github
+                            spec:
+                              paths:
+                                - ecs-merge.yaml
+                              connectorRef: Github2
+                              gitFetchType: Branch
+                              branch: master
+                      roleArn: ""
                   timeout: 10m
         tags: {}
