@@ -1,20 +1,20 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: "Ecr repository"
 Parameters:
-  RepoName2: 
+  ECRRepo: 
     Type: String
     Description: providing the repo name
 Resources:
   Repository1: 
     Type: AWS::ECR::Repository
     Properties: 
-      RepositoryName: !Ref RepoName2
+      RepositoryName: !Ref ECRRepo
       Tags:
         - Key: Application
           Value: Ecr1
 Outputs:
   RepoName:
-    Value: !Ref RepoName2
+    Value: !Ref ECRRepo
 
 
 
