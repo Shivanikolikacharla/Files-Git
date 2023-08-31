@@ -35,5 +35,9 @@ pipeline:
                               gitFetchType: Branch
                               branch: master
                       roleArn: ""
+                      parameterOverrides:
+                        - name: RepoName1
+                          value: ECR-Rep
+                          type: String
                   timeout: 10m
         tags: {}
