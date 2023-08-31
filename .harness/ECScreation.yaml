@@ -1,0 +1,43 @@
+pipeline:
+  name: ECS-creation
+  identifier: ECScreation
+  projectIdentifier: Harness1
+  orgIdentifier: default
+  tags: {}
+  stages:
+    - stage:
+        name: ecr
+        identifier: ecr
+        description: ""
+        type: Custom
+        spec:
+          execution:
+            steps:
+              - step:
+                  type: CreateStack
+                  name: ECR-Creation
+                  identifier: ECRCreation
+                  spec:
+                    provisionerIdentifier: ECR
+                    configuration:
+                      stackName: ecr-stack
+                      connectorRef: AWSACG
+                      region: us-east-1
+                      templateFile:
+                        type: Remote
+                        spec:
+                          store:
+                            type: Github
+                            spec:
+                              paths:
+                                - ecr.yaml
+                              connectorRef: Github2
+                              gitFetchType: Branch
+                              branch: master
+                      roleArn: ""
+                      parameterOverrides:
+                        - name: RepoName
+                          value: <+input>
+                          type: String
+                  timeout: 10m
+        tags: {}
