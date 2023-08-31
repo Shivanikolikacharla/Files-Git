@@ -96,9 +96,6 @@ pipeline:
                         - name: ContainerPort
                           value: "80"
                           type: String
-                        - name: EcsClustername
-                          value: ECS-cluster
-                          type: String
                         - name: ImageURI
                           value: <+input>
                           type: String
