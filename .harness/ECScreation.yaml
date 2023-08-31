@@ -15,12 +15,12 @@ pipeline:
             steps:
               - step:
                   type: CreateStack
-                  name: ECR-Creation
-                  identifier: ECRCreation
+                  name: CreateStack_1
+                  identifier: CreateStack_1
                   spec:
-                    provisionerIdentifier: ECR
+                    provisionerIdentifier: ecr1
                     configuration:
-                      stackName: ecr-stack
+                      stackName: ecr-89
                       connectorRef: AWSACG
                       region: us-east-1
                       templateFile:
@@ -35,31 +35,14 @@ pipeline:
                               gitFetchType: Branch
                               branch: master
                       roleArn: ""
-                      parameterOverrides:
-                        - name: RepoName
-                          value: <+input>
-                          type: String
                   timeout: 10m
         tags: {}
     - stage:
-        name: ecs-stage
-        identifier: ecsstage
+        name: ecs
+        identifier: ecs
         description: ""
-        type: Deployment
+        type: Custom
         spec:
-          deploymentType: ECS
-          service:
-            serviceRef: ECSser
-          environment:
-            environmentRef: ECSdevuseast1
-            deployToAll: false
-            infrastructureDefinitions:
-              - identifier: dev
-                inputs:
-                  identifier: dev
-                  type: ECS
-                  spec:
-                    cluster: <+input>
           execution:
             steps:
               - step:
@@ -67,36 +50,9 @@ pipeline:
                   name: CreateStack_1
                   identifier: CreateStack_1
                   spec:
-                    provisionerIdentifier: ECR
+                    provisionerIdentifier: ecs
                     configuration:
-                      stackName: ECR
-                      connectorRef: AWSACG
-                      region: us-east-1
-                      templateFile:
-                        type: Remote
-                        spec:
-                          store:
-                            type: Github
-                            spec:
-                              paths:
-                                - ecr.yaml
-                              connectorRef: Github2
-                              gitFetchType: Branch
-                              branch: master
-                      roleArn: ""
-                      parameterOverrides:
-                        - name: RepoName
-                          value: <+input>
-                          type: String
-                  timeout: 10m
-              - step:
-                  type: CreateStack
-                  name: CreateStack_2
-                  identifier: CreateStack_2
-                  spec:
-                    provisionerIdentifier: ECS
-                    configuration:
-                      stackName: ECS-Stack
+                      stackName: ecs-cre
                       connectorRef: AWSACG
                       region: us-east-1
                       templateFile:
@@ -111,40 +67,5 @@ pipeline:
                               gitFetchType: Branch
                               branch: master
                       roleArn: ""
-                      parameterOverrides:
-                        - name: MinContainers
-                          value: <+input>
-                          type: String
-                        - name: Subnet2
-                          value: <+input>
-                          type: String
-                        - name: ContainerMemory
-                          value: <+input>
-                          type: String
-                        - name: ServiceName
-                          value: <+input>
-                          type: String
-                        - name: ContainerCpu
-                          value: <+input>
-                          type: String
-                        - name: VPC
-                          value: <+input>
-                          type: String
-                        - name: ContainerPort
-                          value: <+input>
-                          type: String
-                        - name: EcsClustername
-                          value: <+input>
-                          type: String
-                        - name: ImageURI
-                          value: <+input>
-                          type: String
                   timeout: 10m
-            rollbackSteps: []
         tags: {}
-        failureStrategies:
-          - onFailure:
-              errors:
-                - AllErrors
-              action:
-                type: StageRollback
