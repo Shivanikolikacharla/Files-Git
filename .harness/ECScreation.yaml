@@ -35,6 +35,10 @@ pipeline:
                               gitFetchType: Branch
                               branch: master
                       roleArn: ""
+                      parameterOverrides:
+                        - name: RepoName
+                          value: my-repo12
+                          type: String
                   timeout: 10m
         tags: {}
     - stage:
@@ -67,5 +71,27 @@ pipeline:
                               gitFetchType: Branch
                               branch: master
                       roleArn: ""
+                      parameterOverrides:
+                        - name: MinContainers
+                          value: <+input>
+                          type: String
+                        - name: ContainerMemory
+                          value: <+input>
+                          type: String
+                        - name: ServiceName
+                          value: <+input>
+                          type: String
+                        - name: ContainerCpu
+                          value: <+input>
+                          type: String
+                        - name: ContainerPort
+                          value: <+input>
+                          type: String
+                        - name: EcsClustername
+                          value: <+input>
+                          type: String
+                        - name: ImageURI
+                          value: <+input>
+                          type: String
                   timeout: 10m
         tags: {}
