@@ -67,9 +67,36 @@ pipeline:
                   name: CreateStack_1
                   identifier: CreateStack_1
                   spec:
-                    provisionerIdentifier: ecr
+                    provisionerIdentifier: ECR
                     configuration:
-                      stackName: ecs-cre
+                      stackName: ECR
+                      connectorRef: AWSACG
+                      region: us-east-1
+                      templateFile:
+                        type: Remote
+                        spec:
+                          store:
+                            type: Github
+                            spec:
+                              paths:
+                                - ecr.yaml
+                              connectorRef: Github2
+                              gitFetchType: Branch
+                              branch: master
+                      roleArn: ""
+                      parameterOverrides:
+                        - name: RepoName
+                          value: <+input>
+                          type: String
+                  timeout: 10m
+              - step:
+                  type: CreateStack
+                  name: CreateStack_2
+                  identifier: CreateStack_2
+                  spec:
+                    provisionerIdentifier: ECS
+                    configuration:
+                      stackName: ECS-Stack
                       connectorRef: AWSACG
                       region: us-east-1
                       templateFile:
@@ -84,13 +111,6 @@ pipeline:
                               gitFetchType: Branch
                               branch: master
                       roleArn: ""
-                      parameterOverrides:
-                        - name: VPC
-                          value: <+input>
-                          type: String
-                        - name: Subnet1
-                          value: gggg
-                          type: String
                   timeout: 10m
             rollbackSteps: []
         tags: {}
