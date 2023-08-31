@@ -1,6 +1,9 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: "Ecs cluster creation"
 Parameters:
+  EcsClustername: 
+    Type: String
+    Description: Name of the Cluster
   ServiceName:
     Type: String
     Description: A name for the service
