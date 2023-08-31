@@ -89,7 +89,7 @@ pipeline:
                           value: <+input>
                           type: String
                         - name: Subnet1
-                          value: <+input>
+                          value: gggg
                           type: String
                   timeout: 10m
             rollbackSteps: []
