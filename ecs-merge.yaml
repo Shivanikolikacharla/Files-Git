@@ -1,9 +1,6 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: "Ecs cluster creation"
 Parameters:
-  EcsClustername: 
-    Type: String
-    Description: Name of the Cluster
   ServiceName:
     Type: String
     Description: A name for the service
@@ -54,6 +51,8 @@ Resources:
       Cpu: !Ref ContainerCpu
       Memory: !Ref ContainerMemory
       NetworkMode: awsvpc
+      ExecutionRoleArn: !Ref ExecutionRole
+      TaskRoleArn: !Ref TaskRole
   MyECSService:
     Type: AWS::ECS::Service
     Properties:
@@ -70,6 +69,28 @@ Resources:
             - !Ref Subnet2
           SecurityGroups:
             - !Ref ContainerSecurityGroup
+  ExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: ExeRole1
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action: "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+  TaskRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: ecsRole2
+      AssumeRolePolicyDocument:
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: ecs-tasks.amazonaws.com
+            Action: "sts:AssumeRole"
   ContainerSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -79,4 +100,3 @@ Resources:
         - IpProtocol: tcp
           FromPort: !Ref ContainerPort
           ToPort: !Ref ContainerPort 
-      
