@@ -41,3 +41,62 @@ pipeline:
                           type: String
                   timeout: 10m
         tags: {}
+    - stage:
+        name: ecs-stage
+        identifier: ecsstage
+        description: ""
+        type: Deployment
+        spec:
+          deploymentType: ECS
+          service:
+            serviceRef: ECSser
+          environment:
+            environmentRef: ECSdevuseast1
+            deployToAll: false
+            infrastructureDefinitions:
+              - identifier: dev
+                inputs:
+                  identifier: dev
+                  type: ECS
+                  spec:
+                    cluster: <+input>
+          execution:
+            steps:
+              - step:
+                  type: CreateStack
+                  name: CreateStack_1
+                  identifier: CreateStack_1
+                  spec:
+                    provisionerIdentifier: ecr
+                    configuration:
+                      stackName: ecs-cre
+                      connectorRef: AWSACG
+                      region: us-east-1
+                      templateFile:
+                        type: Remote
+                        spec:
+                          store:
+                            type: Github
+                            spec:
+                              paths:
+                                - ecs-merge.yaml
+                              connectorRef: Github2
+                              gitFetchType: Branch
+                              branch: master
+                      roleArn: ""
+                      parameterOverrides:
+                        - name: VPC
+                          value: <+input>
+                          type: String
+                        - name: Subnet1
+                          value: <+input>
+                          type: String
+                  timeout: 10m
+            rollbackSteps: []
+        tags: {}
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: StageRollback
