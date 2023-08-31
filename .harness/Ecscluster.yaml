@@ -36,7 +36,7 @@ pipeline:
                               branch: master
                       roleArn: ""
                       parameterOverrides:
-                        - name: ECRRepo1
+                        - name: ECRRepo
                           value: ECR-R
                           type: String
                   timeout: 10m
