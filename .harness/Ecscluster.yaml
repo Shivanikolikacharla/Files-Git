@@ -30,7 +30,7 @@ pipeline:
                             type: Github
                             spec:
                               paths:
-                                - ecr.yaml
+                                - ecr1.yaml
                               connectorRef: Conector2
                               gitFetchType: Branch
                               branch: master
