@@ -36,8 +36,8 @@ pipeline:
                       roleArn: ""
                       connectorRef: AWSACG2
                       parameterOverrides:
-                        - name: RepoName
-                          value: <+input>
+                        - name: RepoName1
+                          value: ecr-repos
                           type: String
                   timeout: 10m
         tags: {}
