@@ -3,57 +3,58 @@ Description: "Ecs cluster creation"
 Parameters:
   ServiceName:
     Type: String
-    Default: ecsservice
+    Description: A name for the service
   VPC:
     Type: String
-    Default: vpc-0c656415e8d14bb30
+    Description: using the default vpc
   Subnet1:
     Type: String
-    Default: subnet-0efd8693e90c812a3
+    Description: using the default subnet
   Subnet2:
     Type: String
-    Default: subnet-0def3cea0eaa78f25
+    Description: using the default subnet
   ContainerPort:
     Type: Number
-    Default: 80
+    Description: What port number the application inside the docker container is binding to
   ContainerMemory:
     Type: String
-    Default: 1GB
+    Description: How much memory in megabytes to give the container
   MinContainers:
     Type: Number
-    Default: 1
+    Description: How many copies of the service task to run
   ContainerCpu:
     Type: String
-    Default: 256
+    Description:  How much CPU to give the container. 1024 is 1 CPU
+  ImageURI:
+    Type: String
+    Description: The url of a docker image that contains the application
 Resources:
   ECSCluster:
     Type: AWS::ECS::Cluster
     Properties: 
-      ClusterName: ECSClusterName
+      ClusterName: !Ref EcsClustername
       CapacityProviders:
         - FARGATE
         - FARGATE_SPOT
   TaskDef:
     Type: AWS::ECS::TaskDefinition
     Properties: 
-      Family: "My-def"
+      Family: !Ref ServiceName
       NetworkMode: awsvpc
       RequiresCompatibilities:
         - FARGATE
       ContainerDefinitions:
         - Name: !Ref ServiceName
-          Image: "645293861782.dkr.ecr.us-east-1.amazonaws.com/t-repository:latest"        
+          Image: !Ref ImageURI        
           PortMappings:
             - ContainerPort: !Ref ContainerPort
       Cpu: !Ref ContainerCpu
       Memory: !Ref ContainerMemory
       NetworkMode: awsvpc
-      ExecutionRoleArn: !Ref ExecutionRole
-      TaskRoleArn: !Ref TaskRole
   MyECSService:
     Type: AWS::ECS::Service
     Properties:
-      ServiceName: myservice
+      ServiceName: !Ref ServiceName
       Cluster: !Ref ECSCluster
       TaskDefinition: !Ref TaskDef
       DesiredCount: !Ref MinContainers
@@ -66,28 +67,6 @@ Resources:
             - !Ref Subnet2
           SecurityGroups:
             - !Ref ContainerSecurityGroup
-  ExecutionRole:
-    Type: AWS::IAM::Role
-    Properties:
-      RoleName: ExeRole1
-      AssumeRolePolicyDocument:
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service: ecs-tasks.amazonaws.com
-            Action: "sts:AssumeRole"
-      ManagedPolicyArns:
-        - "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
-  TaskRole:
-    Type: AWS::IAM::Role
-    Properties:
-      RoleName: ecsRole2
-      AssumeRolePolicyDocument:
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service: ecs-tasks.amazonaws.com
-            Action: "sts:AssumeRole"
   ContainerSecurityGroup:
     Type: AWS::EC2::SecurityGroup
     Properties:
@@ -97,10 +76,4 @@ Resources:
         - IpProtocol: tcp
           FromPort: !Ref ContainerPort
           ToPort: !Ref ContainerPort 
-Outputs:
-  ECSTaskDefinition:
-    Description: The created Taskdefinition.
-    Value: !Ref TaskDef       
-
-
-  
+      
