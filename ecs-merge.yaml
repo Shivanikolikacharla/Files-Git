@@ -1,8 +1,6 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: "Ecs cluster creation"
 Parameters:
-  ECSClusterName:
-    Type: String
   ServiceName:
     Type: String
     Description: A name for the service
@@ -30,6 +28,9 @@ Parameters:
   ImageURI:
     Type: String
     Description: The url of a docker image that contains the application
+  ECSClusterName:
+    Type: String
+    Description: cluster name
 Resources:
   ECSCluster:
     Type: AWS::ECS::Cluster
