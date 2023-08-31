@@ -1,6 +1,8 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Description: "Ecs cluster creation"
 Parameters:
+  ECSCluster:
+    Type: String
   ServiceName:
     Type: String
     Description: A name for the service
@@ -32,7 +34,7 @@ Resources:
   ECSCluster:
     Type: AWS::ECS::Cluster
     Properties: 
-      ClusterName: !Ref EcsClustername
+      ClusterName: !Ref ECSCluster
       CapacityProviders:
         - FARGATE
         - FARGATE_SPOT
