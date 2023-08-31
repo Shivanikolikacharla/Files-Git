@@ -102,5 +102,8 @@ pipeline:
                         - name: ImageURI
                           value: <+input>
                           type: String
+                        - name: ECSClusterName
+                          value: clust-23
+                          type: String
                   timeout: 10m
         tags: {}
