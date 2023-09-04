@@ -13,18 +13,6 @@ Parameters:
   Subnet2:
     Type: String
     Description: using the default subnet
-  ContainerPort:
-    Type: Number
-    Description: What port number the application inside the docker container is binding to
-  ContainerMemory:
-    Type: String
-    Description: How much memory in megabytes to give the container
-  MinContainers:
-    Type: Number
-    Description: How many copies of the service task to run
-  ContainerCpu:
-    Type: String
-    Description:  How much CPU to give the container. 1024 is 1 CPU
   ImageURI:
     Type: String
     Description: The url of a docker image that contains the application
@@ -38,7 +26,9 @@ Resources:
       ClusterName: !Ref ECSClusterName
       CapacityProviders:
         - FARGATE
-        - FARGATE_SPOT
+      Tags:
+        - Key: Application1
+          Value: ecs1     
   TaskDef:
     Type: AWS::ECS::TaskDefinition
     Properties: 
@@ -50,18 +40,21 @@ Resources:
         - Name: !Ref ServiceName
           Image: !Ref ImageURI        
           PortMappings:
-            - ContainerPort: !Ref ContainerPort
-      Cpu: !Ref ContainerCpu
-      Memory: !Ref ContainerMemory
+            - ContainerPort: 80
+      Cpu: 256
+      Memory: 1GB
       NetworkMode: awsvpc
       ExecutionRoleArn: !Ref ExecutionRole
+      Tags:
+        - Key: taskdef
+          Value: task1 
   MyECSService:
     Type: AWS::ECS::Service
     Properties:
       ServiceName: !Ref ServiceName
       Cluster: !Ref ECSCluster
       TaskDefinition: !Ref TaskDef
-      DesiredCount: !Ref MinContainers
+      DesiredCount: 1
       LaunchType: FARGATE
       NetworkConfiguration:
         AwsvpcConfiguration:
@@ -69,8 +62,9 @@ Resources:
           Subnets:
             - !Ref Subnet1
             - !Ref Subnet2
-          SecurityGroups:
-            - !Ref ContainerSecurityGroup
+      Tags:
+        - Key: ECSSer
+          Value: service    
   ExecutionRole:
     Type: AWS::IAM::Role
     Properties:
@@ -83,12 +77,4 @@ Resources:
             Action: "sts:AssumeRole"
       ManagedPolicyArns:
         - "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
-  ContainerSecurityGroup:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: MySecGrp
-      VpcId: !Ref VPC
-      SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: !Ref ContainerPort
-          ToPort: !Ref ContainerPort 
+      
