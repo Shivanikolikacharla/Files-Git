@@ -72,9 +72,6 @@ pipeline:
                               branch: master
                       roleArn: ""
                       parameterOverrides:
-                        - name: Subnet1
-                          value: <+input>
-                          type: String
                         - name: MinContainers
                           value: <+input>
                           type: String
@@ -101,6 +98,9 @@ pipeline:
                           type: String
                         - name: ImageURI
                           value: <+input>
+                          type: String
+                        - name: Subnet1
+                          value: <+env.variables.subnet>
                           type: String
                   timeout: 20m
         tags: {}
