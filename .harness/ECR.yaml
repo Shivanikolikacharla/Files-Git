@@ -72,28 +72,16 @@ pipeline:
                               branch: master
                       roleArn: ""
                       parameterOverrides:
-                        - name: MinContainers
-                          value: <+input>
-                          type: String
                         - name: Subnet2
                           value: <+input>
                           type: String
-                        - name: ContainerMemory
-                          value: <+input>
-                          type: String
                         - name: ServiceName
-                          value: <+input>
-                          type: String
-                        - name: ContainerCpu
                           value: <+input>
                           type: String
                         - name: ECSClusterName
                           value: <+input>
                           type: String
                         - name: VPC
-                          value: <+input>
-                          type: String
-                        - name: ContainerPort
                           value: <+input>
                           type: String
                         - name: ImageURI
