@@ -50,6 +50,15 @@ pipeline:
                         - name: Subnet1
                           value: <+env.variables.Subnet1>
                           type: String
+                        - name: ServiceName
+                          value: ECS-Service
+                          type: String
+                        - name: ECSClusterName
+                          value: ECS-Cluster1
+                          type: String
+                        - name: ImageURI
+                          value: <+input>
+                          type: String
                   timeout: 10m
             rollbackSteps: []
         tags: {}
