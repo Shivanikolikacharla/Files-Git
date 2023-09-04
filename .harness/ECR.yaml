@@ -100,7 +100,7 @@ pipeline:
                           value: <+input>
                           type: String
                         - name: Subnet1
-                          value: <+env.variables.subnet>
+                          value: <+env.variables.Subnet1>
                           type: String
                   timeout: 20m
         tags: {}
