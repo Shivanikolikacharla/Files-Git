@@ -1,0 +1,61 @@
+pipeline:
+  name: ECR-env
+  identifier: ECRenv
+  projectIdentifier: Harness1
+  orgIdentifier: default
+  tags: {}
+  stages:
+    - stage:
+        name: ecs-env
+        identifier: ecsenv
+        description: ""
+        type: Deployment
+        spec:
+          deploymentType: ECS
+          service:
+            serviceRef: clustercre
+          environment:
+            environmentRef: ecsenv
+            deployToAll: false
+            infrastructureDefinitions:
+              - identifier: ecseast1
+          execution:
+            steps:
+              - step:
+                  type: CreateStack
+                  name: CreateStack_1
+                  identifier: CreateStack_1
+                  spec:
+                    provisionerIdentifier: ECS
+                    configuration:
+                      stackName: ECs-S
+                      connectorRef: AWS1
+                      region: us-east-1
+                      templateFile:
+                        type: Remote
+                        spec:
+                          store:
+                            type: Github
+                            spec:
+                              paths:
+                                - ecs-merge.yaml
+                              connectorRef: Github2
+                              gitFetchType: Branch
+                              branch: master
+                      roleArn: ""
+                      parameterOverrides:
+                        - name: VPC
+                          value: <+input>
+                          type: String
+                        - name: Subnet1
+                          value: <+env.variables.Subnet1>
+                          type: String
+                  timeout: 10m
+            rollbackSteps: []
+        tags: {}
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: StageRollback
