@@ -104,3 +104,78 @@ pipeline:
                           type: String
                   timeout: 20m
         tags: {}
+    - stage:
+        name: ecs-deploy
+        identifier: ecsdeploy
+        description: ""
+        type: Deployment
+        spec:
+          deploymentType: ECS
+          service:
+            serviceRef: clustercre
+          environment:
+            environmentRef: ecsenv
+            deployToAll: false
+            infrastructureDefinitions:
+              - identifier: ecseast1
+          execution:
+            steps:
+              - step:
+                  type: CreateStack
+                  name: CreateStack_1
+                  identifier: CreateStack_1
+                  spec:
+                    provisionerIdentifier: ECR
+                    configuration:
+                      stackName: ecr-stack
+                      connectorRef: AWS1
+                      region: us-east-1
+                      templateFile:
+                        type: Remote
+                        spec:
+                          store:
+                            type: Github
+                            spec:
+                              paths:
+                                - ecs-merge.yaml
+                              connectorRef: Github2
+                              gitFetchType: Branch
+                              branch: master
+                      roleArn: ""
+                      parameterOverrides:
+                        - name: Subnet1
+                          value: subnet-0efd869<+env.variables.Subnet1>3e90c812a3
+                          type: String
+                        - name: MinContainers
+                          value: "1"
+                          type: String
+                        - name: Subnet2
+                          value: subnet-0c47e273d5ca1180e
+                          type: String
+                        - name: ContainerMemory
+                          value: 1GB
+                          type: String
+                        - name: ServiceName
+                          value: ECSSer
+                          type: String
+                        - name: ContainerCpu
+                          value: "256"
+                          type: String
+                        - name: ECSClusterName
+                          value: ECSCluster
+                          type: String
+                        - name: VPC
+                          value: vpc-0c656415e8d14bb30
+                          type: String
+                        - name: ContainerPort
+                          value: "80"
+                          type: String
+                  timeout: 10m
+            rollbackSteps: []
+        tags: {}
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: StageRollback
