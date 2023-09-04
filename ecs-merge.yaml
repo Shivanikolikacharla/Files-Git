@@ -68,7 +68,7 @@ Resources:
   ExecutionRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: ExeRole1
+      RoleName: ExeRole2
       AssumeRolePolicyDocument:
         Statement:
           - Effect: Allow
