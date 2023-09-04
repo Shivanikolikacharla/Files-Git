@@ -59,6 +59,9 @@ pipeline:
                         - name: ImageURI
                           value: <+input>
                           type: String
+                        - name: Subnet2
+                          value: subnet-075d67688161634c7
+                          type: String
                   timeout: 10m
             rollbackSteps: []
         tags: {}
