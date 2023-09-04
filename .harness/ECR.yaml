@@ -37,7 +37,7 @@ pipeline:
                       roleArn: ""
                       parameterOverrides:
                         - name: ECRRepo
-                          value: repo2345
+                          value: repo23789
                           type: String
                   timeout: 10m
         tags: {}
