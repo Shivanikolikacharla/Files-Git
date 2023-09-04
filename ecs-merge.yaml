@@ -55,7 +55,6 @@ Resources:
       Memory: !Ref ContainerMemory
       NetworkMode: awsvpc
       ExecutionRoleArn: !Ref ExecutionRole
-      TaskRoleArn: !Ref TaskRole
   MyECSService:
     Type: AWS::ECS::Service
     Properties:
