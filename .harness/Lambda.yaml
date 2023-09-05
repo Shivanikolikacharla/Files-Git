@@ -1,0 +1,37 @@
+pipeline:
+  name: Lambda
+  identifier: Lambda
+  projectIdentifier: Harness1
+  orgIdentifier: default
+  tags: {}
+  stages:
+    - stage:
+        name: lambda_dep
+        identifier: lambda_dep
+        description: ""
+        type: Deployment
+        spec:
+          deploymentType: AwsLambda
+          service:
+            serviceRef: Lambda_ser
+          environment:
+            environmentRef: Lambda_env
+            deployToAll: false
+            infrastructureDefinitions:
+              - identifier: Dev_useast1
+          execution:
+            steps:
+              - step:
+                  type: AwsLambdaDeploy
+                  name: AwsLambdaDeploy_1
+                  identifier: AwsLambdaDeploy_1
+                  spec: {}
+                  timeout: 10m
+            rollbackSteps: []
+        tags: {}
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: StageRollback
