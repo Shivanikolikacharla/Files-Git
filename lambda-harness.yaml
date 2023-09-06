@@ -1,13 +1,10 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: Lambda behind API Gateway
-Parameters:
-  FunName: 
-    Type: String
 Resources: 
   Lambda:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: !Ref FunName
+      FunctionName: LambdaFun
       Runtime: python3.9
       Role: !GetAtt LambdaRole.Arn
       Handler: index.my_handler
