@@ -13,7 +13,15 @@ pipeline:
         spec:
           deploymentType: AwsLambda
           service:
-            serviceRef: Lambda_ser
+            serviceRef: Lambdanewser
+            serviceInputs:
+              serviceDefinition:
+                type: AwsLambda
+                spec:
+                  artifacts:
+                    primary:
+                      primaryArtifactRef: <+input>
+                      sources: <+input>
           environment:
             environmentRef: Lambda_env
             deployToAll: false
