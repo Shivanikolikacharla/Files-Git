@@ -1,0 +1,67 @@
+pipeline:
+  name: EKS-
+  identifier: EKS
+  projectIdentifier: Harness1
+  orgIdentifier: default
+  tags: {}
+  stages:
+    - stage:
+        name: EKS-dep
+        identifier: EKSdep
+        description: ""
+        type: Deployment
+        spec:
+          deploymentType: Kubernetes
+          service:
+            serviceRef: EKSSer
+          environment:
+            environmentRef: EKSdev
+            deployToAll: false
+            infrastructureDefinitions:
+              - identifier: EKSINfra
+          execution:
+            steps:
+              - step:
+                  type: CreateStack
+                  name: CreateStack_1
+                  identifier: CreateStack_1
+                  spec:
+                    provisionerIdentifier: EKS
+                    configuration:
+                      stackName: EKs-Stack
+                      connectorRef: AWS1
+                      region: us-east-1
+                      templateFile:
+                        type: Remote
+                        spec:
+                          store:
+                            type: Github
+                            spec:
+                              paths:
+                                - EKS.yaml
+                              connectorRef: Github2
+                              gitFetchType: Branch
+                              branch: master
+                      roleArn: ""
+                      parameterOverrides:
+                        - name: ClusterName
+                          value: <+input>
+                          type: String
+                        - name: SecurityGroup
+                          value: <+input>
+                          type: String
+                        - name: SubnetId2
+                          value: <+input>
+                          type: String
+                        - name: SubnetId1
+                          value: <+input>
+                          type: String
+                  timeout: 10m
+            rollbackSteps: []
+        tags: {}
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: StageRollback
