@@ -1,4 +1,4 @@
-AWSTemplateFormatVersion: "2010-09-09"
+ AWSTemplateFormatVersion: "2010-09-09"
 Description: "Ecs cluster creation"
 Parameters:
   ServiceName:
@@ -13,9 +13,6 @@ Parameters:
   Subnet2:
     Type: String
     Description: using the default subnet
-  ImageURI:
-    Type: String
-    Description: The url of a docker image that contains the application
   ECSClusterName:
     Type: String
     Description: cluster name
@@ -33,18 +30,17 @@ Resources:
     Type: AWS::ECS::TaskDefinition
     Properties: 
       Family: !Ref ServiceName
-      NetworkMode: awsvpc
       RequiresCompatibilities:
         - FARGATE
       ContainerDefinitions:
         - Name: !Ref ServiceName
-          Image: !Ref ImageURI        
+          Image: httpd:2.4       
           PortMappings:
             - ContainerPort: 80
+              Protocol: tcp
       Cpu: 256
       Memory: 1GB
       NetworkMode: awsvpc
-      ExecutionRoleArn: !Ref ExecutionRole
       Tags:
         - Key: taskdef
           Value: task1 
@@ -65,16 +61,10 @@ Resources:
       Tags:
         - Key: ECSSer
           Value: service    
-  ExecutionRole:
-    Type: AWS::IAM::Role
-    Properties:
-      RoleName: ExeRole2
-      AssumeRolePolicyDocument:
-        Statement:
-          - Effect: Allow
-            Principal:
-              Service: ecs-tasks.amazonaws.com
-            Action: "sts:AssumeRole"
-      ManagedPolicyArns:
-        - "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
-      
+Outputs:
+  ClusterName:
+    Value: !Ref ECSClusterName
+
+
+
+  
