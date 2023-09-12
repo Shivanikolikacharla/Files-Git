@@ -35,5 +35,18 @@ pipeline:
                               gitFetchType: Branch
                               branch: master
                       roleArn: ""
+                      parameterOverrides:
+                        - name: ClusterName
+                          value: <+input>
+                          type: String
+                        - name: SecurityGroup
+                          value: <+input>
+                          type: String
+                        - name: SubnetId2
+                          value: <+input>
+                          type: String
+                        - name: SubnetId1
+                          value: <+input>
+                          type: String
                   timeout: 10m
         tags: {}
