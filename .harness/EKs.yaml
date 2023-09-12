@@ -48,5 +48,5 @@ pipeline:
                         - name: SubnetId1
                           value: <+input>
                           type: String
-                  timeout: 10m
+                  timeout: 20m
         tags: {}
