@@ -1,0 +1,43 @@
+pipeline:
+  name: S3-creation
+  identifier: S3creation
+  projectIdentifier: Harness1
+  orgIdentifier: default
+  tags: {}
+  stages:
+    - stage:
+        name: S3-Infra
+        identifier: S3Infra
+        description: ""
+        type: Custom
+        spec:
+          execution:
+            steps:
+              - step:
+                  type: CreateStack
+                  name: CreateStack_1
+                  identifier: CreateStack_1
+                  spec:
+                    provisionerIdentifier: S3
+                    configuration:
+                      stackName: S3-crea
+                      connectorRef: AWS1
+                      region: us-east-1
+                      templateFile:
+                        type: Remote
+                        spec:
+                          store:
+                            type: Github
+                            spec:
+                              paths:
+                                - harness example.yml
+                              connectorRef: Github2
+                              gitFetchType: Branch
+                              branch: master
+                      roleArn: ""
+                      parameterOverrides:
+                        - name: Bucket12
+                          value: <+input>
+                          type: String
+                  timeout: 10m
+        tags: {}
