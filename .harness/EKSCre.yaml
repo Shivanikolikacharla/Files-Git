@@ -1,0 +1,52 @@
+pipeline:
+  name: EKS-Cre
+  identifier: EKSCre
+  projectIdentifier: Harness1
+  orgIdentifier: default
+  tags: {}
+  stages:
+    - stage:
+        name: EKS-Stage
+        identifier: EKSStage
+        description: ""
+        type: Custom
+        spec:
+          execution:
+            steps:
+              - step:
+                  type: CreateStack
+                  name: CreateStack_1
+                  identifier: CreateStack_1
+                  spec:
+                    provisionerIdentifier: EKS
+                    configuration:
+                      stackName: EKS-Stack
+                      connectorRef: AWS1
+                      region: us-east-1
+                      templateFile:
+                        type: Remote
+                        spec:
+                          store:
+                            type: Github
+                            spec:
+                              paths:
+                                - EKS.yaml
+                              connectorRef: Github2
+                              gitFetchType: Branch
+                              branch: master
+                      roleArn: ""
+                      parameterOverrides:
+                        - name: ClusterName
+                          value: <+input>
+                          type: String
+                        - name: SecurityGroup
+                          value: <+input>
+                          type: String
+                        - name: SubnetId2
+                          value: <+input>
+                          type: String
+                        - name: SubnetId1
+                          value: <+input>
+                          type: String
+                  timeout: 10m
+        tags: {}
