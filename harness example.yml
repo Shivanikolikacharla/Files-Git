@@ -8,3 +8,7 @@ Resources:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: !Ref Bucket12
+      Tags: 
+        - Key: keyname
+          Value: Bucket1
+    
