@@ -51,9 +51,6 @@ pipeline:
                               branch: master
                       roleArn: ""
                       parameterOverrides:
-                        - name: Subnet1
-                          value: <+env.variables.Subnet1>
-                          type: String
                         - name: Subnet2
                           value: <+input>
                           type: String
@@ -65,6 +62,9 @@ pipeline:
                           type: String
                         - name: VPC
                           value: <+input>
+                          type: String
+                        - name: Subnet1
+                          value: <+env.variable<+env.variables.Subnet1>s.Subnet1>
                           type: String
                   timeout: 10m
             rollbackSteps: []
