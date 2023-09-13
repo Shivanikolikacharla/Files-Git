@@ -1,0 +1,55 @@
+pipeline:
+  name: ECS-Crea
+  identifier: ECSCrea
+  projectIdentifier: Harness1
+  orgIdentifier: default
+  tags: {}
+  stages:
+    - stage:
+        name: ECS
+        identifier: ECS
+        description: ""
+        type: Custom
+        spec:
+          execution:
+            steps:
+              - step:
+                  type: CreateStack
+                  name: CreateStack_1
+                  identifier: CreateStack_1
+                  spec:
+                    provisionerIdentifier: ECS
+                    configuration:
+                      stackName: ECS-stack1
+                      connectorRef: AWS1
+                      region: us-east-1
+                      templateFile:
+                        type: Remote
+                        spec:
+                          store:
+                            type: Github
+                            spec:
+                              paths:
+                                - ecs-merge.yaml
+                              connectorRef: Github2
+                              gitFetchType: Branch
+                              branch: master
+                      roleArn: ""
+                      parameterOverrides:
+                        - name: Subnet1
+                          value: <+input>
+                          type: String
+                        - name: Subnet2
+                          value: <+input>
+                          type: String
+                        - name: ServiceName
+                          value: <+input>
+                          type: String
+                        - name: ECSClusterName
+                          value: <+input>
+                          type: String
+                        - name: VPC
+                          value: <+input>
+                          type: String
+                  timeout: 10m
+        tags: {}
