@@ -16,13 +16,6 @@ pipeline:
             serviceRef: ECSService
           environment:
             environmentRef: ECSdev
-            environmentInputs:
-              identifier: ECSdev
-              type: PreProduction
-              variables:
-                - name: Subnet1
-                  type: String
-                  value: <+input>
             deployToAll: false
             infrastructureDefinitions:
               - identifier: ECSinfra
