@@ -1,0 +1,77 @@
+pipeline:
+  name: ECS-Pipe
+  identifier: ECSPipe
+  projectIdentifier: Harness1
+  orgIdentifier: default
+  tags: {}
+  stages:
+    - stage:
+        name: ECS-deploy
+        identifier: ECSdeploy
+        description: ""
+        type: Deployment
+        spec:
+          deploymentType: ECS
+          service:
+            serviceRef: ECSService
+          environment:
+            environmentRef: ECSdev
+            environmentInputs:
+              identifier: ECSdev
+              type: PreProduction
+              variables:
+                - name: Subnet1
+                  type: String
+                  value: <+input>
+            deployToAll: false
+            infrastructureDefinitions:
+              - identifier: ECSinfra
+          execution:
+            steps:
+              - step:
+                  type: CreateStack
+                  name: CreateStack_1
+                  identifier: CreateStack_1
+                  spec:
+                    provisionerIdentifier: ECS
+                    configuration:
+                      stackName: Stack-ECS
+                      connectorRef: AWS1
+                      region: us-east-1
+                      templateFile:
+                        type: Remote
+                        spec:
+                          store:
+                            type: Github
+                            spec:
+                              paths:
+                                - ecs-merge.yaml
+                              connectorRef: Github2
+                              gitFetchType: Branch
+                              branch: master
+                      roleArn: ""
+                      parameterOverrides:
+                        - name: Subnet1
+                          value: <+env.variables.Subnet1>
+                          type: String
+                        - name: Subnet2
+                          value: <+input>
+                          type: String
+                        - name: ServiceName
+                          value: <+input>
+                          type: String
+                        - name: ECSClusterName
+                          value: <+input>
+                          type: String
+                        - name: VPC
+                          value: <+input>
+                          type: String
+                  timeout: 10m
+            rollbackSteps: []
+        tags: {}
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: StageRollback
