@@ -64,7 +64,7 @@ pipeline:
                           value: <+input>
                           type: String
                         - name: Subnet1
-                          value: <+env.variable<+env.variables.Subnet1>s.Subnet1>
+                          value: <+env.variables.Subnet1>
                           type: String
                   timeout: 10m
             rollbackSteps: []
