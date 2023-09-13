@@ -41,9 +41,3 @@ pipeline:
                           type: String
                   timeout: 10m
         tags: {}
-  variables:
-    - name: Bucket12
-      type: String
-      description: ""
-      required: false
-      value: <+input>
