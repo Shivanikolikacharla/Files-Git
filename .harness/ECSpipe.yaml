@@ -1,0 +1,75 @@
+pipeline:
+  name: ECS-pipe
+  identifier: ECSpipe
+  projectIdentifier: Harness1
+  orgIdentifier: default
+  tags: {}
+  stages:
+    - stage:
+        name: ecs-deploy
+        identifier: ecsdeploy
+        description: ""
+        type: Deployment
+        spec:
+          deploymentType: ECS
+          service:
+            serviceRef: ECSServ
+          environment:
+            environmentRef: devuseast1
+            deployToAll: false
+            infrastructureDefinitions:
+              - identifier: ECSinfra
+                inputs:
+                  identifier: ECSinfra
+                  type: ECS
+                  spec:
+                    cluster: <+input>
+          execution:
+            steps:
+              - step:
+                  type: CreateStack
+                  name: CreateStack_1
+                  identifier: CreateStack_1
+                  spec:
+                    provisionerIdentifier: ECS
+                    configuration:
+                      stackName: ECS-S
+                      connectorRef: AWS1
+                      region: us-east-1
+                      templateFile:
+                        type: Remote
+                        spec:
+                          store:
+                            type: Github
+                            spec:
+                              paths:
+                                - ecs-merge.yaml
+                              connectorRef: Github2
+                              gitFetchType: Branch
+                              branch: master
+                      roleArn: ""
+                      parameterOverrides:
+                        - name: Subnet1
+                          value: <+env.variables.Subnet1>
+                          type: String
+                        - name: Subnet2
+                          value: subnet-06fbf0ac5b10493c6
+                          type: String
+                        - name: ServiceName
+                          value: ECS-Ser
+                          type: String
+                        - name: ECSClusterName
+                          value: ECS-Clu
+                          type: String
+                        - name: VPC
+                          value: vpc-04ae040d1d4b351cd
+                          type: String
+                  timeout: 10m
+            rollbackSteps: []
+        tags: {}
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: StageRollback
