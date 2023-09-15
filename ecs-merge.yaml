@@ -34,7 +34,7 @@ Resources:
         - FARGATE
       ContainerDefinitions:
         - Name: !Ref ServiceName
-          Image: httpd:2.4       
+          Image: nginx:latest     
           PortMappings:
             - ContainerPort: 80
               Protocol: tcp
