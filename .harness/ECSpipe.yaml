@@ -34,7 +34,7 @@ pipeline:
                     provisionerIdentifier: ECS
                     configuration:
                       stackName: ECS-S
-                      connectorRef: AWS1
+                      connectorRef: AWSA
                       region: us-east-1
                       templateFile:
                         type: Remote
