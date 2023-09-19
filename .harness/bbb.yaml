@@ -36,3 +36,7 @@ pipeline:
                     imageName: mcr.microsoft.com/windows/servercore:ltsc2022
                     tags:
                       - im
+        delegateSelectors:
+          - docker-delegate
+        when:
+          pipelineStatus: Success
