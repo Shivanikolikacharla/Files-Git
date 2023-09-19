@@ -1,0 +1,38 @@
+pipeline:
+  name: bbb
+  identifier: bbb
+  projectIdentifier: Harness1
+  orgIdentifier: default
+  tags: {}
+  properties:
+    ci:
+      codebase:
+        connectorRef: Github2
+        build: <+input>
+  stages:
+    - stage:
+        name: bb
+        identifier: bb
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Docker
+            spec: {}
+          execution:
+            steps:
+              - step:
+                  type: BuildAndPushECR
+                  name: BuildAndPushECR_1
+                  identifier: BuildAndPushECR_1
+                  spec:
+                    connectorRef: AWSA
+                    region: <+input>
+                    account: "831872632567"
+                    imageName: mcr.microsoft.com/windows/servercore:ltsc2022
+                    tags:
+                      - im
