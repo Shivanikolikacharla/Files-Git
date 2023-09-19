@@ -31,7 +31,7 @@ pipeline:
                   identifier: BuildAndPushECR_1
                   spec:
                     connectorRef: AWSA
-                    region: <+input>
+                    region: us-east-1
                     account: "831872632567"
                     imageName: mcr.microsoft.com/windows/servercore:ltsc2022
                     tags:
