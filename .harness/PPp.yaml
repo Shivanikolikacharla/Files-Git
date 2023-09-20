@@ -1,0 +1,38 @@
+pipeline:
+  name: PPp
+  identifier: PPp
+  projectIdentifier: Harness1
+  orgIdentifier: default
+  tags: {}
+  properties:
+    ci:
+      codebase:
+        connectorRef: Github2
+        build: <+input>
+  stages:
+    - stage:
+        name: b
+        identifier: b
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          execution:
+            steps:
+              - step:
+                  type: BuildAndPushECR
+                  name: BuildAndPushECR_1
+                  identifier: BuildAndPushECR_1
+                  spec:
+                    connectorRef: AWS1
+                    region: AWS_ACCOUNT_ID.dkr.ecr.REGION.amazonaws.com
+                    account: aws_account_id.dkr.ecr.region.amazonaws.com
+                    imageName: microsoft/nanoserver
+                    tags:
+                      - <+pipeline.sequenceId>
+          platform:
+            os: Linux
+            arch: Amd64
+          runtime:
+            type: Docker
+            spec: {}
