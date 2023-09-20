@@ -25,8 +25,8 @@ pipeline:
                   identifier: BuildAndPushECR_1
                   spec:
                     connectorRef: AWS1
-                    region: AWS_ACCOUNT_ID.dkr.ecr.REGION.amazonaws.com
-                    account: aws_account_id.dkr.ecr.region.amazonaws.com
+                    region: 645293861782.dkr.ecr.REGION.amazonaws.com
+                    account: "645293861782"
                     imageName: microsoft/nanoserver
                     tags:
                       - <+pipeline.sequenceId>
