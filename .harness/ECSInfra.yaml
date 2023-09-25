@@ -35,5 +35,18 @@ pipeline:
                               gitFetchType: Branch
                               branch: master
                       roleArn: ""
+                      parameterOverrides:
+                        - name: Subnet1
+                          value: <+input>
+                          type: String
+                        - name: ServiceName
+                          value: <+input>
+                          type: String
+                        - name: ECSClusterName
+                          value: <+input>
+                          type: String
+                        - name: VPC
+                          value: <+input>
+                          type: String
                   timeout: 10m
         tags: {}
