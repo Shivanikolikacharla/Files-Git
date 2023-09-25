@@ -10,9 +10,6 @@ Parameters:
   Subnet1:
     Type: String
     Description: using the default subnet
-  Subnet2:
-    Type: String
-    Description: using the default subnet
   ECSClusterName:
     Type: String
     Description: cluster name
@@ -57,7 +54,6 @@ Resources:
           AssignPublicIp: ENABLED
           Subnets:
             - !Ref Subnet1
-            - !Ref Subnet2
       Tags:
         - Key: ECSSer
           Value: service    
