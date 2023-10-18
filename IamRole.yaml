@@ -65,7 +65,7 @@ Resources:
       Tags:
         - Key: AppName
           Value: !Join ["-", [!Ref Name, !Ref Environment, td ] ]
- Outputs:
+Outputs:
   TaskDefName:
     Value: !Ref ECSTaskDefinition
     Export:
