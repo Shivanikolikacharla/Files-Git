@@ -15,9 +15,10 @@ Resources:
     Type: AWS::ECS::Service
     Properties:
       ServiceName: !Ref ServiceName
-      Cluster: !Ref ECSCluster
-      TaskDefinition: !Ref TaskDef
-      DesiredCount: !Ref MinContainers
+      Cluster: ecs-clu
+      TaskDefinition: 
+        Fn::ImportValue: 
+      DesiredCount: 1
       LaunchType: FARGATE
       NetworkConfiguration:
         AwsvpcConfiguration:
