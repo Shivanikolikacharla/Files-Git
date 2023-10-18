@@ -1,0 +1,56 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: TaskRole 
+Parameters:
+  AppCI:
+    Type: String
+    Description: Lowercase AppCI Example abc
+    Default: ejc
+  #SLALevel:
+    #Type: String
+    #Default: Tier 3
+  #RiskDataClass:
+   # Type: String
+   # Default: Risk Level:Medium
+  #ApplicationContactDL:
+   # Type: String
+   # Default: DL@united.com
+ 
+  DataRetentionPeriod:
+    Type: String
+    Description: Example 5 years
+    Default: "5 years"
+  VPCId:
+    Type: String
+    Default: "vpc-031afc73dd3a017d5"      
+  #VpcCidrBlock:
+    #Type: String
+Resources:
+  TaskRole:
+    Type: AWS::IAM::Role
+    Properties:
+       RoleName: !Sub ${AppCI}-csi-ecs-${EnvNameLower}-role
+       PermissionsBoundary: !Sub arn:aws:iam::${AWS::AccountId}:policy/AppPolicy_Harness
+       Path: /
+       AssumeRolePolicyDocument: |
+           {
+               "Statement": [{
+                   "Sid": "",
+                   "Effect": "Allow",
+                   "Principal": { "Service": [ "ecs-tasks.amazonaws.com", "ec2.amazonaws.com"]}, 
+                   "Action": "sts:AssumeRole"
+               }]
+           }
+       ManagedPolicyArns:
+           - arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceRole             
+           - arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
+       Tags:
+            - Key: AppCI
+              Value: !Ref AppCI
+           # - Key: ApplicationContactDL
+             # Value: !Ref ApplicationContactDL
+            #- Key: MaintenanceWindow
+            #  Value: !Ref MaintenanceWindow      
+Outputs:
+  ECSTaskRole:
+    Description: ECS Task execution role
+    Value: !Ref TaskRole 
