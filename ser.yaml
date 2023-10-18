@@ -1,6 +1,7 @@
 Parameters:
   Servicename:
     Type: String
+    Default: myseri
   VPC:
     Type: String
     Default: vpc-0c656415e8d14bb30
