@@ -39,11 +39,11 @@ Resources:
       Memory: !Ref Memory
       TaskRoleArn: !Ref TaskRoleArn
       ExecutionRoleArn: !Ref TaskRoleArn
-      Family: !Join ["-", [!Ref ApplicationCI, !Ref Name, !Ref Environment, td ] ]
-#      Family: !Join ["-", [!Ref Group, !Ref ApplicationCI, !Ref Name, !Ref Environment, td ] ]
+      Family: !Join ["-", [!Ref Name, td ] ]
+#      Family: !Join ["-", [!Ref Name, !Ref Environment, td ] ]
       NetworkMode: awsvpc
       ContainerDefinitions:
-        - Name: !Join ["-", [!Ref ApplicationCI, !Ref Name, !Ref Environment, container ] ]
+        - Name: !Join ["-", [!Ref Environment, container ] ]
           Image: !Ref ContainerImage
           StopTimeout: 120
           #EnvironmentFiles:
@@ -61,14 +61,8 @@ Resources:
 #            Command: !Ref HealthCheckCommand
 #            StartPeriod: 120
 #            Retries: 4
-          LogConfiguration:
-            LogDriver: awslogs
-            Options:
-                awslogs-group: !Ref LogGroup
-                awslogs-region: !Ref AWS::Region
-                awslogs-stream-prefix: !Ref Environment
+
       Tags:
         - Key: AppName
-          Value: !Join ["-", [!Ref ApplicationCI, !Ref Name, !Ref Environment, td ] ]
-        - Key: Group
-          Value: !Ref Group
+          Value: !Join ["-", [!Ref Name, !Ref Environment, td ] ]
+        
