@@ -1,56 +1,74 @@
-AWSTemplateFormatVersion: 2010-09-09
-Description: TaskRole 
+Description: This creats an ECS Task Definition.
 Parameters:
-  AppCI:
+ # Required information to for the ECS Task Definition
+  Name:
     Type: String
-    Description: Lowercase AppCI Example abc
-    Default: ejc
-  #SLALevel:
-    #Type: String
-    #Default: Tier 3
-  #RiskDataClass:
-   # Type: String
-   # Default: Risk Level:Medium
-  #ApplicationContactDL:
-   # Type: String
-   # Default: DL@united.com
- 
-  DataRetentionPeriod:
+    Description: Name of the resource(s); Used to identify each individual resource
+  Environment:
     Type: String
-    Description: Example 5 years
-    Default: "5 years"
-  VPCId:
+    Description: Provides information on what the resource group is used for (useful for maintenance, policy enforcement, chargeback, etc.)
+    AllowedValues:
+      - dev
+      - qa
+      - stg
+      - prd
+  CPU:
     Type: String
-    Default: "vpc-031afc73dd3a017d5"      
-  #VpcCidrBlock:
-    #Type: String
+    Description: The number of cpu units used by the task
+  Memory:
+    Type: String
+    Description: The ECS Task memory in MiB
+  TaskRoleArn:
+    Type: String
+    Description: The Task and Execution Role used by the ECS Task 
+    
+ # Required Parameters for the Container Definition
+  ContainerImage:
+    Type: String
+    Description: The image used to start a container 
+  ContainerPort:
+    Type: Number
+    Description: The port number on the container that is bound
+ # Required Parameters for DataDog Container Definition
 Resources:
-  TaskRole:
-    Type: AWS::IAM::Role
+ # ECS Task Definition
+  ECSTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
     Properties:
-       RoleName: !Sub ${AppCI}-csi-ecs-${EnvNameLower}-role
-       PermissionsBoundary: !Sub arn:aws:iam::${AWS::AccountId}:policy/AppPolicy_Harness
-       Path: /
-       AssumeRolePolicyDocument: |
-           {
-               "Statement": [{
-                   "Sid": "",
-                   "Effect": "Allow",
-                   "Principal": { "Service": [ "ecs-tasks.amazonaws.com", "ec2.amazonaws.com"]}, 
-                   "Action": "sts:AssumeRole"
-               }]
-           }
-       ManagedPolicyArns:
-           - arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceRole             
-           - arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
-       Tags:
-            - Key: AppCI
-              Value: !Ref AppCI
-           # - Key: ApplicationContactDL
-             # Value: !Ref ApplicationContactDL
-            #- Key: MaintenanceWindow
-            #  Value: !Ref MaintenanceWindow      
-Outputs:
-  ECSTaskRole:
-    Description: ECS Task execution role
-    Value: !Ref TaskRole 
+      Cpu: !Ref CPU
+      Memory: !Ref Memory
+      TaskRoleArn: !Ref TaskRoleArn
+      ExecutionRoleArn: !Ref TaskRoleArn
+      Family: !Join ["-", [!Ref ApplicationCI, !Ref Name, !Ref Environment, td ] ]
+#      Family: !Join ["-", [!Ref Group, !Ref ApplicationCI, !Ref Name, !Ref Environment, td ] ]
+      NetworkMode: awsvpc
+      ContainerDefinitions:
+        - Name: !Join ["-", [!Ref ApplicationCI, !Ref Name, !Ref Environment, container ] ]
+          Image: !Ref ContainerImage
+          StopTimeout: 120
+          #EnvironmentFiles:
+            #- Type: s3
+              #Value: !Ref S3EnvFileArn
+          PortMappings:
+            - ContainerPort: !Ref ContainerPort
+              HostPort: !Ref ContainerPort
+              Protocol: tcp
+          #Ulimits:
+            #- Name: nofile
+              #HardLimit: 65535
+              #SoftLimit: 65535
+#          HealthCheck:
+#            Command: !Ref HealthCheckCommand
+#            StartPeriod: 120
+#            Retries: 4
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+                awslogs-group: !Ref LogGroup
+                awslogs-region: !Ref AWS::Region
+                awslogs-stream-prefix: !Ref Environment
+      Tags:
+        - Key: AppName
+          Value: !Join ["-", [!Ref ApplicationCI, !Ref Name, !Ref Environment, td ] ]
+        - Key: Group
+          Value: !Ref Group
