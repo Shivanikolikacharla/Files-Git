@@ -10,6 +10,7 @@ Parameters:
   Subnet2:
     Type: String
     Default: subnet-0def3cea0eaa78f25
+Resources:
   MyECSService:
     Type: AWS::ECS::Service
     Properties:
