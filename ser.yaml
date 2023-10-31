@@ -1,16 +1,12 @@
 Parameters:
   Servicename:
     Type: String
-    Default: myseri
   VPC:
     Type: String
-    Default: vpc-0c656415e8d14bb30
   Subnet1:
     Type: String
-    Default: subnet-0efd8693e90c812a3
   Subnet2:
     Type: String
-    Default: subnet-0def3cea0eaa78f25
 Resources:
   MyECSService:
     Type: AWS::ECS::Service
