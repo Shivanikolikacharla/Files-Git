@@ -1,0 +1,37 @@
+{
+  "capacityProviderStrategy": [],
+  "launchType": "FARGATE",
+  "placementConstraints": [],
+  "placementStrategy": [],
+  "serviceName": "<+serviceVariables.ServiceName>",
+  "deploymentConfiguration": {
+    "maximumPercent": "<+serviceVariables.maximumPercent>",
+    "minimumHealthyPercent": "<+serviceVariables.minimumHealthyPercent>"
+  },
+  "tags": [
+    {
+      "key": "ApplicationCI",
+      "value": "<+serviceVariables.ApplicationCI>"
+    },
+    {
+      "key": "Name",
+      "value": "<+serviceVariables.ApplicationCI>-<+serviceVariables.ServiceName>-<+serviceVariables.Env>-service"
+    }
+  ],
+  "schedulingStrategy": "REPLICA",
+  "desiredCount": "<+serviceVariables.desiredCount>",
+  "propagateTags": "SERVICE",
+  "networkConfiguration": {
+    "awsvpcConfiguration": {
+      "securityGroups": [
+        "<+serviceVariables.securityGroups>"
+      ],
+      "subnets": [
+        "<+serviceVariables.AppTierSubnet1>",
+        "<+serviceVariables.AppTierSubnet2>",
+        "<+serviceVariables.AppTierSubnet3>"
+      ],
+      "assignPublicIp": "DISABLED"
+    }
+  }
+}
