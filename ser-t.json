@@ -1,0 +1,18 @@
+{
+    "cluster": "ecs1",
+    "serviceName": "service1",
+    "taskDefinition": "task26",
+    "desiredCount": 1,
+    "networkConfiguration": {
+       "awsvpcConfiguration": {
+         
+       }
+    },
+    "loadBalancers": [
+        {
+            "targetGroupArn": "arn:aws:elasticloadbalancing:us-east-1:152132717090:loadbalancer/net/lb/a3fb9585fd11794a",
+            "containerName": "task26",
+            "containerPort": 80
+       }
+    ]
+}
