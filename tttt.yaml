@@ -1,0 +1,136 @@
+executionRoleArn: <+serviceVariables.executionRoleArn>
+taskRoleArn: <+serviceVariables.taskexecutionRoleArn>
+requiresCompatibilities:
+- FARGATE
+family: <+serviceVariables.ApplicationCI>-<+serviceVariables.ServiceName>
+networkMode: awsvpc
+cpu: <+serviceVariables.CPU>
+memory: <+serviceVariables.Memory>
+volumes: []
+requiresAttributes: []
+placementConstraints: []
+compatibilities: []
+inferenceAccelerators: []
+containerDefinitions:
+- name: <+serviceVariables.ServiceName>
+  image: <+artifacts.primary.image>
+  repositoryCredentials:
+    credentialsParameter: <+serviceVariables.ArtifactoryCloudARN>
+  portMappings:
+  - containerPort: <+serviceVariables.ContainerPort>
+  environment:
+  - name: APPLICATION_CI
+    value: <+serviceVariables.ApplicationCI>
+  - name: DD_SERVICE
+    value: <+serviceVariables.ApplicationCI>-<+serviceVariables.ServiceName>
+  - name: DD_ENV
+    value: <+serviceVariables.Env>
+  - name: DD_API_KEY
+    value: <+serviceVariables.DDAPIKey>
+  - name: ECS_FARGATE
+    value: 'true'
+  - name: DD_TRACE_DEBUG
+    value: 'true'
+  - name: DD_TRACE_STARTUP_LOGS
+    value: 'true'
+  - name: DD_APM_ENABLED
+    value: <+serviceVariables.DDAPMEnabled>
+  - name: DD_VERSION
+    value: <+serviceVariables.DDVersion>
+  - name: DD_LOGS_INJECTION
+    value: 'true'
+  - name: DD_TRACE_GLOBAL_TAGS
+    value: "applicationci:<+serviceVariables.ApplicationCI>"
+  - name: DD_APM_IGNORE_RESOURCES
+    value: <+serviceVariables.DDAPMIgnoreResources>
+  - name: DOTNET_ENVIRONMENT
+    value: <+serviceVariables.ASPNETCORE_ENVIRONMENT>
+  logConfiguration:
+    logDriver: awsfirelens
+    options:
+      Name: datadog
+      Host: http-intake.logs.datadoghq.com
+      TLS: 'on'
+      dd_service: "<+serviceVariables.ApplicationCI>-<+serviceVariables.ServiceName>"
+      dd_source: nodejs
+      dd_tags: applicationci:<+serviceVariables.ApplicationCI>, env:<+serviceVariables.Env>
+      dd_message_key: log
+      provider: ecs
+      apikey: "<+serviceVariables.DDAPIKey>"
+      compress: gzip
+  dependsOn:
+  - containerName: <+serviceVariables.ApplicationCI>-log-router
+    condition: START
+  memoryReservation: 100
+
+- name: <+serviceVariables.ApplicationCI>-log-router
+  image: <+serviceVariables.FluentDImage>
+  repositoryCredentials:
+    credentialsParameter: <+serviceVariables.ArtifactoryCloudARN>
+  essential: 'true'
+  firelensConfiguration:
+    type: fluentbit
+    options:
+      enable-ecs-log-metadata: 'true'
+  MemoryReservation: 50
+  dockerLabels:
+    com.datadoghq.ad.tags: "<+serviceVariables.ApplicationCI>"
+    com.datadoghq.tags.env: "<+serviceVariables.Env>"
+    com.datadoghq.tags.service: "<+serviceVariables.ApplicationCI>-<+serviceVariables.ServiceName>"
+
+  logConfiguration:
+    logDriver: awslogs
+    options:
+      awslogs-group: /ecs/<+serviceVariables.ApplicationCI>/<+serviceVariables.ServiceName>
+      awslogs-region: <+serviceVariables.region>
+      awslogs-create-group: true
+      awslogs-stream-prefix: <+serviceVariables.ApplicationCI>firelens
+    tags:
+    - key: ApplicationCI
+      value: <+serviceVariables.ApplicationCI>
+
+- name: <+serviceVariables.ApplicationCI>-datadog-agent
+  image: <+serviceVariables.DDImage>
+  repositoryCredentials:
+    credentialsParameter: <+serviceVariables.ArtifactoryCloudARN>
+  essential: 'true'
+  portMappings:
+  - containerPort: <+serviceVariables.DDContainerPort>
+  environment:
+  - name: DD_API_KEY
+    value: <+serviceVariables.DDAPIKey>
+  - name: ECS_FARGATE
+    value: 'true'
+  - name: DD_SERVICE
+    value: <+serviceVariables.ApplicationCI>-<+serviceVariables.awsServiceName>
+  - name: DD_SERVICE_NAME
+    value: <+serviceVariables.ApplicationCI>-<+serviceVariables.ServiceName>
+  - name: SERVICEURL
+    value: <+serviceVariables.ApplicationCI>-<+serviceVariables.awsServiceName>
+  - name: DD_ENV
+    value: <+serviceVariables.Env>
+  - name: DD_TRACE_DEBUG
+    value: 'true'
+  - name: DD_TRACE_STARTUP_LOGS
+    value: 'true'
+  - name: DD_APM_ENABLED
+    value: 'true'
+  - name: DD_VERSION
+    value: <+serviceVariables.DDVersion>
+  - name: DD_TAGS
+    value: "applicationci: <+<+serviceVariables.ApplicationCI>.toLowerCase()>"
+  - name: DD_TRACE_GLOBAL_TAGS
+    value: "applicationci: <+<+serviceVariables.ApplicationCI>.toLowerCase()>"
+  - name: DD_APM_IGNORE_RESOURCES
+    value: Harness
+  - name: DD_DOCKER_LABELS_AS_TAGS
+    value: '{"com.datadoghq.ad.tags":"<+<+serviceVariables.ApplicationCI>.toLowerCase()>"}'
+  - name: DD_RUNTIME_METRICS_ENABLED
+    value: 'true'
+  - name: DD_DOGSTATSD_NON_LOCAL_TRAFFIC
+    value: 'true'
+  - name: DD_LOGS_INJECTION
+    value: 'true'
+tags:
+- key: ApplicationCI
+  value: <+serviceVariables.ApplicationCI>
